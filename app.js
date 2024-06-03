@@ -9,6 +9,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
+app.use(require("./router/user-account"));
+
 app.get("/", async (req, resp) => {
   resp.send("Project Running Successfully");
 });

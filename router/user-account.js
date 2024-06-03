@@ -1,4 +1,6 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
+const jwt = require("jsonwebtoken");
 const User = require("../model/user-account");
 
 //signup
@@ -47,8 +49,18 @@ router.post("/user-login", async (req, res) => {
     if (isUser.password !== password) {
       return res.send({ success: false, msg: "incorrect password" });
     }
-    return res.send({ success: true, msg: "User logged in successfully" });
+
+    const token = jwt.sign({ _id: isUser._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1d",
+    });
+    return res.send({
+      success: true,
+      msg: "User logged in successfully",
+      token: token,
+    });
   } catch (err) {
     return res.send({ success: false, msg: `error : ${err.message}` });
   }
 });
+
+module.exports = router;
